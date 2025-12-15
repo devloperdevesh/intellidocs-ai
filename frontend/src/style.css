@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    background: #0f172a;
+    font-family: system-ui, sans-serif;
+    color: white;
+}
+
+.app {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    opacity: 0.8;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #020617;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.card input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+.card button {
+    margin-top: 12px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #6366f1;
+    color: white;
+    cursor: pointer;
+}
+
+.preview {
+    background: #020617;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.answer-card {
+    background: linear-gradient(135deg, #1e293b, #020617);
+    padding: 24px;
+    border-radius: 14px;
+    border: 1px solid #334155;
+}
+
+.answer-card p {
+    margin-top: 10px;
+    line-height: 1.6;
+}

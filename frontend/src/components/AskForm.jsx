@@ -1,29 +1,48 @@
-import { askQuestion } from "../services/api";
 import { useState } from "react";
+
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AskForm({ setAnswer }) {
   const [question, setQuestion] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  async function handleAsk() {
+  const handleAsk = async (e) => {
+    e.preventDefault();
     if (!question) return;
-    const res = await askQuestion(question);
-    setAnswer(res.answer);
-  }
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(`${API_BASE}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Failed to get answer");
+
+      setAnswer(data.answer);
+    } catch (err) {
+      setAnswer("❌ " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-      <h2 className="section-title">❓ Ask Question</h2>
-
+    <form onSubmit={handleAsk}>
       <input
-        className="text-input"
-        placeholder="Ask something about the document..."
+        type="text"
+        placeholder="Ask a question..."
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
+        required
       />
-
-      <button className="primary-btn" onClick={handleAsk}>
-        Ask
+      <button type="submit" disabled={loading}>
+        {loading ? "Thinking..." : "Ask"}
       </button>
-    </>
+    </form>
   );
 }

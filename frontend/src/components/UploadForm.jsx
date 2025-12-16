@@ -1,34 +1,51 @@
-import { uploadDoc } from "../services/api";
 import { useState } from "react";
+
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function UploadForm() {
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  async function handleUpload() {
-    if (!file) return alert("Select a file");
-    const res = await uploadDoc(file);
-    setResult(res);
-  }
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setLoading(true);
+      setMessage("");
+
+      const res = await fetch(`${API_BASE}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+
+      setMessage("✅ File uploaded successfully");
+    } catch (err) {
+      setMessage("❌ " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-      <h2 className="section-title">📤 Upload Document</h2>
-
+    <form onSubmit={handleUpload}>
       <input
         type="file"
         onChange={(e) => setFile(e.target.files[0])}
+        required
       />
-
-      <button className="primary-btn" onClick={handleUpload}>
-        Upload
+      <button type="submit" disabled={loading}>
+        {loading ? "Uploading..." : "Upload"}
       </button>
-
-      {result && (
-        <pre className="preview">
-          {result.preview}
-        </pre>
-      )}
-    </>
+      {message && <p>{message}</p>}
+    </form>
   );
 }

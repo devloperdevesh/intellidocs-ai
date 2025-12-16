@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = `${import.meta.env.VITE_API_BASE}/api`;
 
 export async function uploadDoc(file) {
   const form = new FormData();
@@ -9,6 +9,10 @@ export async function uploadDoc(file) {
     body: form,
   });
 
+  if (!res.ok) {
+    throw new Error("Upload failed");
+  }
+
   return res.json();
 }
 
@@ -18,6 +22,10 @@ export async function askQuestion(question) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question }),
   });
+
+  if (!res.ok) {
+    throw new Error("Question failed");
+  }
 
   return res.json();
 }

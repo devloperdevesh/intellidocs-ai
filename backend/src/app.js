@@ -4,16 +4,16 @@ const apiRoutes = require('./routes/api');
 
 const app = express();
 
-// CORS ENABLE
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '*', // for now
 }));
 
 app.use(express.json());
 app.use('/api', apiRoutes);
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK' });
+  res.json({ status: 'ok' });
 });
 
 module.exports = app;
+

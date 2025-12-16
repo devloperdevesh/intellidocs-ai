@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-const API_BASE = import.meta.env.VITE_API_BASE;
+import { uploadDoc } from "../services/api";
 
 export default function UploadForm() {
   const [file, setFile] = useState(null);
@@ -11,21 +10,11 @@ export default function UploadForm() {
     e.preventDefault();
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
       setLoading(true);
       setMessage("");
 
-      const res = await fetch(`${API_BASE}/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error || "Upload failed");
+      await uploadDoc(file);
 
       setMessage("✅ File uploaded successfully");
     } catch (err) {
